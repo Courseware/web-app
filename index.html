@@ -13,7 +13,12 @@
   </head>
   <body>
     <script>
-      $(document).foundation();
+      (function() {
+        (function(win, $) {
+          return $(document).foundation();
+        })(window, jQuery);
+      
+      }).call(this);
     </script>
   </body>
 </html>
