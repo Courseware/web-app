@@ -14,8 +14,8 @@ jumping in.
 1. Clone the repository
 2. Run `bundle install`
 3. Run guard `bundle exec guard`
-4. Run `bundle exec rake server`
-6. Open your browser and navigate to `http://lvh.me:8000`
+4. Run `bundle exec rackup`
+6. Open your browser and navigate to `http://lvh.me:9292`
 
 # Coding style
 
