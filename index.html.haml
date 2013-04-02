@@ -11,5 +11,7 @@
     %link{:href => 'assets/stylesheets/application.css', :rel => 'stylesheet'}
     %script{:src => 'assets/javascripts/application.js'}
   %body
-    :javascript
-      $(document).foundation();
+    :coffee
+      ((win, $) ->
+        $(document).foundation()
+      ) window, jQuery
