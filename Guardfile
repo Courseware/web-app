@@ -1,9 +1,14 @@
 require 'handlebars/source'
 require 'ember/source'
 require 'ember/data/source'
+require 'sprockets'
+require 'haml'
 require 'handlebars_assets'
+require 'hamlbars/ext'
 
+Haml::Compiler.send(:include, Hamlbars::Ext::Compiler)
 HandlebarsAssets::Config.ember = true
+Sprockets.register_engine '.hamlbars', HandlebarsAssets::TiltHandlebars
 
 guard 'haml' do
   watch(/^.+(\.html\.haml)/)
@@ -20,7 +25,7 @@ guard 'sprockets', {
     ],
     :root_file => 'assets/javascripts/application.js'
   } do
-  watch(/^javascripts\/(.*)\.(js|coffee)/)
+  watch(/^javascripts\/(.*)\.(js|coffee|hamlbars)/)
 end
 
 guard 'compass' do

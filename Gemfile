@@ -20,6 +20,7 @@ group :assets do
   gem 'ember-source'
   gem 'ember-data-source'
   gem 'handlebars_assets'
+  gem 'hamlbars'
 end
 
 group :development, :test do
