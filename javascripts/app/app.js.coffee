@@ -11,4 +11,6 @@
 //= require_tree ./templates
 //= require ./router
 
-window.Courseware = Ember.Application.create()
+window.Courseware = Ember.Application.create
+  rootElement: '#content'
+  access_token: null
