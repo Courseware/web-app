@@ -1,3 +1,4 @@
 Courseware.Store = DS.Store.extend
   revision: 11
-  adapter: DS.RESTAdapter.create()
+  url: 'http://api.journey.nerd.ro'
+  adapter: DS.RESTAdapter.create({ bulkCommit: false })
