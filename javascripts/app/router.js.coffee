@@ -1,5 +1,7 @@
 Courseware.Router.reopen
   rootURL: '/'
 
-Courseware.Router.map (match)->
-  # match('/').to('index')
+Courseware.Router.map ->
+  @resource 'session', ->
+    @route 'new'
+    @route 'end'
