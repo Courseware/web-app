@@ -48665,7 +48665,10 @@ DS.RESTAdapter = DS.Adapter.extend({
 })();
 
 (function() {
-  window.Courseware = Ember.Application.create();
+  window.Courseware = Ember.Application.create({
+    rootElement: '#content',
+    access_token: null
+  });
 
 }).call(this);
 (function() {
@@ -48699,14 +48702,25 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 }).call(this);
 (function() {
+  Courseware.SessionView = Ember.View.extend({
+    templateName: 'app/templates/session/new'
+  });
+
+}).call(this);
+(function() {
   Courseware.IndexRoute = Ember.Route.extend();
 
 }).call(this);
-window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>Welcome</h1>\n{{outlet}}\n");(function() {
+window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>Welcome</h1>\n{{outlet}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding=\"email\" name=\"email\" id=\"emailField\"}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding=\"password\" name=\"password\" id=\"passwordField\"}}\n    </p>\n    <p>\n      <input class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");(function() {
   Courseware.Router.reopen({
     rootURL: '/'
   });
 
-  Courseware.Router.map(function(match) {});
+  Courseware.Router.map(function() {
+    return this.resource('session', function() {
+      this.route('new');
+      return this.route('end');
+    });
+  });
 
 }).call(this);
