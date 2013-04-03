@@ -9696,7 +9696,7 @@ if (typeof jQuery === "undefined" &&
   window.Foundation = {
     name : 'Foundation',
 
-    version : '4.0.0',
+    version : '4.0.8',
 
     // global Foundation cache object
     cache : {},
@@ -9706,7 +9706,7 @@ if (typeof jQuery === "undefined" &&
           args = [scope, method, options, response],
           responses = [],
           nc = nc || false;
-
+          
       // disable library error catching,
       // used for development only
       if (nc) this.nc = nc;
@@ -9787,16 +9787,31 @@ if (typeof jQuery === "undefined" &&
       }
     },
 
+    random_str : function (length) {
+      var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
+      
+      if (!length) {
+          length = Math.floor(Math.random() * chars.length);
+      }
+      
+      var str = '';
+      for (var i = 0; i < length; i++) {
+          str += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return str;
+    },
+
     libs : {},
 
     // methods that can be inherited in libraries
     lib_methods : {
       set_data : function (node, data) {
         // this.name references the name of the library calling this method
-        var id = this.name + (+new Date());
+        var id = [this.name,+new Date(),Foundation.random_str(5)].join('-');
 
         Foundation.cache[id] = data;
         node.attr('data-' + this.name + '-id', id);
+        return data;
       },
 
       get_data : function (node) {
@@ -9826,7 +9841,7 @@ if (typeof jQuery === "undefined" &&
         };
       },
 
-      // parses data-options attribute on page nodes and turns
+      // parses data-options attribute on nodes and turns
       // them into an object
       data_options : function (el) {
         var opts = {}, ii, p,
@@ -9834,7 +9849,7 @@ if (typeof jQuery === "undefined" &&
             opts_len = opts_arr.length;
 
         function isNumber (o) {
-          return ! isNaN (o-0) && o !== null && o !== "" && o !== false;
+          return ! isNaN (o-0) && o !== null && o !== "" && o !== false && o !== true;
         }
 
         function trim(str) {
@@ -9850,7 +9865,7 @@ if (typeof jQuery === "undefined" &&
           if (/false/i.test(p[1])) p[1] = false;
           if (isNumber(p[1])) p[1] = parseInt(p[1], 10);
 
-          if (p.length === 2) {
+          if (p.length === 2 && p[0].length > 0) {
             opts[trim(p[0])] = trim(p[1]);
           }
         }
@@ -10013,7 +10028,7 @@ if (typeof jQuery === "undefined" &&
   Foundation.libs.dropdown = {
     name : 'dropdown',
 
-    version : '4.0.6',
+    version : '4.0.9',
 
     settings : {
       activeClass: 'open'
@@ -10104,10 +10119,18 @@ if (typeof jQuery === "undefined" &&
           top: position.top + this.outerHeight(target)
         });
       } else {
+        if ($(window).width() > this.outerWidth(dropdown) + target.offset().left) {
+          var left = position.left;
+        } else {
+          if (!dropdown.hasClass('right')) {
+            dropdown.addClass('right');
+          }
+          var left = position.left - (this.outerWidth(dropdown) - this.outerWidth(target));
+        }
         dropdown.attr('style', '').css({
           position : 'absolute',
           top: position.top + this.outerHeight(target),
-          left: position.left
+          left: left
         });
       }
 
@@ -10296,7 +10319,7 @@ if (typeof jQuery === "undefined" &&
   Foundation.libs.reveal = {
     name: 'reveal',
 
-    version : '4.0.6',
+    version : '4.0.9',
 
     locked : false,
 
@@ -10378,29 +10401,35 @@ if (typeof jQuery === "undefined" &&
         var modal = $(this.scope);
       }
 
-      var open_modal = $('.reveal-modal.open');
+      if (!modal.hasClass('open')) {
+        var open_modal = $('.reveal-modal.open');
 
-      if (!modal.data('css-top')) {
-        modal.data('css-top', parseInt(modal.css('top'), 10))
-          .data('offset', this.cache_offset(modal));
+        if (typeof modal.data('css-top') === 'undefined') {
+          modal.data('css-top', parseInt(modal.css('top'), 10))
+            .data('offset', this.cache_offset(modal));
+        }
+
+        modal.trigger('open');
+
+        if (open_modal.length < 1) {
+          this.toggle_bg(modal);
+        }
+        this.hide(open_modal, this.settings.css.open);
+        this.show(modal, this.settings.css.open);
       }
-
-      modal.trigger('open');
-
-      if (open_modal.length < 1) {
-        this.toggle_bg(modal);
-      }
-
-      this.toggle_modals(open_modal, modal);
     },
 
     close : function (modal) {
-      var modal = modal || $(this.scope);
-      this.locked = true;
-      var open_modal = $('.reveal-modal.open').not(modal);
-      modal.trigger('close');
-      this.toggle_bg(modal);
-      this.toggle_modals(open_modal, modal);
+
+      var modal = modal || $(this.scope),
+          open_modals = $('.reveal-modal.open');
+
+      if (open_modals.length > 0) {
+        this.locked = true;
+        modal.trigger('close');
+        this.toggle_bg(modal);
+        this.hide(open_modals, this.settings.css.close);
+      }
     },
 
     close_targets : function () {
@@ -10413,20 +10442,8 @@ if (typeof jQuery === "undefined" &&
       return base;
     },
 
-    toggle_modals : function (open_modal, modal) {
-      if (open_modal.length > 0) {
-        this.hide(open_modal, this.settings.css.close);
-      }
-
-      if (modal.filter(':visible').length > 0) {
-        this.hide(modal, this.settings.css.close);
-      } else {
-        this.show(modal, this.settings.css.open);
-      }
-    },
-
     toggle_bg : function (modal) {
-      if (this.settings.bg.length === 0) {
+      if ($('.reveal-modal-bg').length === 0) {
         this.settings.bg = $('<div />', {'class': this.settings.bgClass})
           .insertAfter(modal);
       }
