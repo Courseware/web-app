@@ -48667,6 +48667,7 @@ DS.RESTAdapter = DS.Adapter.extend({
 (function() {
   window.Courseware = Ember.Application.create({
     rootElement: '#content',
+    client_id: 'd519f45d71fa5a77ece72120659f77baaf5bf419b20d5c03d851e0858ce549be',
     access_token: null
   });
 

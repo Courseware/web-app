@@ -15,7 +15,7 @@ guard 'haml' do
 end
 
 guard 'sprockets', {
-    :destination => 'assets/javascripts',
+    :destination => 'public',
     :asset_paths => [
       'javascripts',
       File.dirname(Handlebars::Source.bundled_path),
@@ -23,7 +23,7 @@ guard 'sprockets', {
       ::Ember::Data::Source.bundled_path_for(''),
       ::HandlebarsAssets.path
     ],
-    :root_file => 'assets/javascripts/application.js'
+    :root_file => 'public/application.js'
   } do
   watch(/^javascripts\/(.*)\.(js|coffee|hamlbars)/)
 end
