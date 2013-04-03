@@ -18,7 +18,8 @@ guard 'sprockets', {
     :destination => 'public',
     :asset_paths => [
       'javascripts',
-      File.dirname(Handlebars::Source.bundled_path),
+      # Zurb could definitely use some ruby love
+      Pathname.new(Gem::Specification.find_by_name('zurb-foundation').gem_dir).join('js'),
       ::Ember::Source.bundled_path_for(''),
       ::Ember::Data::Source.bundled_path_for(''),
       ::HandlebarsAssets.path
