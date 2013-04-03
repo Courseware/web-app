@@ -1,6 +1,9 @@
 require 'handlebars/source'
 require 'ember/source'
 require 'ember/data/source'
+require 'handlebars_assets'
+
+HandlebarsAssets::Config.ember = true
 
 guard 'haml' do
   watch(/^.+(\.html\.haml)/)
@@ -12,7 +15,8 @@ guard 'sprockets', {
       'javascripts',
       File.dirname(Handlebars::Source.bundled_path),
       ::Ember::Source.bundled_path_for(''),
-      ::Ember::Data::Source.bundled_path_for('')
+      ::Ember::Data::Source.bundled_path_for(''),
+      ::HandlebarsAssets.path
     ],
   } do
   watch 'javascripts/application.js'

@@ -39,6 +39,10 @@ GEM
     haml (4.0.1)
       tilt
     handlebars-source (1.0.0.rc3)
+    handlebars_assets (0.12.0)
+      execjs (>= 1.2.9)
+      sprockets (>= 2.0.3)
+      tilt
     hike (1.2.1)
     libv8 (3.11.8.17)
     listen (0.7.3)
@@ -86,6 +90,7 @@ DEPENDENCIES
   guard-compass
   guard-haml
   guard-sprockets
+  handlebars_assets
   mina
   rb-inotify
   therubyracer

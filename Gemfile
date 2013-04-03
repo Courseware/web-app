@@ -19,6 +19,7 @@ group :assets do
   gem 'coffee-script'
   gem 'ember-source'
   gem 'ember-data-source'
+  gem 'handlebars_assets'
 end
 
 group :development, :test do
