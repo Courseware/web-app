@@ -48704,7 +48704,6 @@ DS.RESTAdapter = DS.Adapter.extend({
 }).call(this);
 window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>Welcome</h1>\n{{outlet}}\n");(function() {
   Courseware.Router.reopen({
-    location: 'history',
     rootURL: '/'
   });
 
