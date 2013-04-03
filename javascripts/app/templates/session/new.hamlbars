@@ -2,10 +2,10 @@
   .large-6.columns
     %p
       %label{:for => :emailField} Email
-      {{view Ember.TextField valueBinding="email" name="email" id="emailField"}}
+      {{view Ember.TextField valueBinding='email' name='email' id='emailField' type='email'}}
     %p
       %label{:for => :passwordField} Password
-      {{view Ember.TextField valueBinding="password" name="password" id="passwordField"}}
+      {{view Ember.TextField valueBinding='password' name='password' id='passwordField'}}
 
     %p
-      %input.button.success.small{:type => :submit}
+      %input.button.success.small{:type => :submit, :bind => {:disabled => :isDisabled}, :_action => 'login'}
