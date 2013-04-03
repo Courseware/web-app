@@ -18,8 +18,9 @@ guard 'sprockets', {
       ::Ember::Data::Source.bundled_path_for(''),
       ::HandlebarsAssets.path
     ],
+    :root_file => 'assets/javascripts/application.js'
   } do
-  watch 'javascripts/application.js'
+  watch(/^javascripts\/(.*)\.(js|coffee)/)
 end
 
 guard 'compass' do
