@@ -48696,6 +48696,19 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 }).call(this);
 (function() {
+  Courseware.SessionController = Ember.ObjectController.extend({
+    email: null,
+    password: null,
+    isDisabled: (function() {
+      return !this.get('email') || !this.get('password');
+    }).property('email', 'password'),
+    login: function() {
+      return console.log(this.get('email'), this.get('password'));
+    }
+  });
+
+}).call(this);
+(function() {
   Courseware.ApplicationView = Ember.View.extend({
     templateName: 'app/templates/application'
   });
@@ -48711,7 +48724,7 @@ DS.RESTAdapter = DS.Adapter.extend({
   Courseware.IndexRoute = Ember.Route.extend();
 
 }).call(this);
-window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>Welcome</h1>\n{{outlet}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding=\"email\" name=\"email\" id=\"emailField\"}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding=\"password\" name=\"password\" id=\"passwordField\"}}\n    </p>\n    <p>\n      <input class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");(function() {
+window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>Welcome</h1>\n{{outlet}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding='email' name='email' id='emailField' type='email'}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding='password' name='password' id='passwordField'}}\n    </p>\n    <p>\n      <input {{bindAttr disabled=\"isDisabled\"}} {{action login}} class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");(function() {
   Courseware.Router.reopen({
     rootURL: '/'
   });
