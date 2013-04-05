@@ -1,0 +1,21 @@
+#menu {
+  position: absolute;
+  left: 0;
+  width: 0;
+  border-right: 10px solid $bw_4;
+  overflow: hidden;
+
+  &.unslided {
+    width: 0;
+    @include transition-property(all);
+    @include transition-duration(1s);
+    @include transition-timing-function(linear);
+  }
+
+  &.slided {
+    @include transition-property(all);
+    @include transition-duration(1s);
+    @include transition-timing-function(linear);
+    width: 20%;
+  }
+}

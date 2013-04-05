@@ -1,0 +1,7 @@
+%h3 {{Courseware.app_name}}
+
+{{#unless Courseware.access_token}}
+%p
+  %a.button.small{:_action => 'goToLogin'}
+    Please login first
+{{/unless}}
