@@ -21,6 +21,7 @@ group :assets do
   gem 'ember-data-source'
   gem 'handlebars_assets'
   gem 'hamlbars'
+  gem 'handlebars-source', '>= 1.0.0.rc3'
 end
 
 group :development, :test do
