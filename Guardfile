@@ -13,7 +13,7 @@ HandlebarsAssets::Config.ember = true
 # Manually register .hamlbars extension
 Sprockets.register_engine('.hamlbars', HandlebarsAssets::TiltHandlebars)
 
-guard 'haml' do
+guard 'haml', :output => 'public' do
   watch(/^.+(\.html\.haml)/)
 end
 
