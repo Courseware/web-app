@@ -1,7 +1,15 @@
-%h1 Welcome
+%h1 {{Courseware.app_name}}
 
-{{outlet}}
+{{#unless Courseware.access_token}}
+%p
+  %a.button.small{:_action => 'goToLogin'}
+    Please login first
+{{/unless}}
+
 .row
   .large-6.columns
     {{view Courseware.NotificationsView}}
 
+.row
+  .large-6.columns
+    {{outlet}}

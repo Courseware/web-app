@@ -1,1 +1,3 @@
-Courseware.ApplicationController = Ember.Controller.extend()
+Courseware.ApplicationController = Ember.Controller.extend
+  goToLogin: ->
+    @transitionTo('session.new')
