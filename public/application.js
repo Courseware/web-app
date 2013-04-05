@@ -48703,7 +48703,6 @@ DS.RESTAdapter = DS.Adapter.extend({
   Courseware.RESTAdapter = DS.RESTAdapter.reopen({
     url: window.location.protocol + '//' + window.location.host,
     namespace: 'v1',
-    auth_endpoint: 'oauth/authenticate',
     client_id: 'd519f45d71fa5a77ece72120659f77baaf5bf419b20d5c03d851e0858ce549be'
   });
 
@@ -48733,9 +48732,6 @@ DS.RESTAdapter = DS.Adapter.extend({
 }).call(this);
 (function() {
   Courseware.ApplicationController = Ember.Controller.extend({
-    isHome: (function() {
-      return this.get('currentRoute') === 'index';
-    }).property('currentRoute'),
     goToLogin: function() {
       return this.transitionTo('session.new');
     }
