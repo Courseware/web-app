@@ -3106,3 +3106,43 @@ small.error {
     margin-top: -5px;
   }
 }
+/* line 1, ../sass/components/_menu.scss */
+#menu {
+  position: absolute;
+  left: 0;
+  width: 0;
+  border-right: 10px solid #52585e;
+  overflow: hidden;
+}
+/* line 8, ../sass/components/_menu.scss */
+#menu.unslided {
+  width: 0;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  -o-transition-duration: 1s;
+  transition-duration: 1s;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-timing-function: linear;
+  -o-transition-timing-function: linear;
+  transition-timing-function: linear;
+}
+/* line 15, ../sass/components/_menu.scss */
+#menu.slided {
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  -o-transition-duration: 1s;
+  transition-duration: 1s;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-timing-function: linear;
+  -o-transition-timing-function: linear;
+  transition-timing-function: linear;
+  width: 20%;
+}

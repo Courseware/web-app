@@ -48733,7 +48733,7 @@ DS.RESTAdapter = DS.Adapter.extend({
 (function() {
   Courseware.ApplicationController = Ember.Controller.extend({
     goToLogin: function() {
-      return this.transitionTo('session.new');
+      return this.transitionToRoute('session.new');
     }
   });
 
@@ -48768,7 +48768,7 @@ DS.RESTAdapter = DS.Adapter.extend({
               className: 'success',
               message: 'Authentication succeeded.'
             });
-            return ctrl.transitionTo('index');
+            return ctrl.transitionToRoute('index');
           }
         },
         error: function(xhr) {
@@ -48784,9 +48784,24 @@ DS.RESTAdapter = DS.Adapter.extend({
   });
 
 }).call(this);
-window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>{{Courseware.app_name}}</h1>\n{{#unless Courseware.access_token}}\n<p>\n  <a {{action goToLogin}} class='button small'>\n    Please login first\n  </a>\n</p>\n{{/unless}}\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding='email' name='email' id='emailField' type='email'}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding='password' name='password' id='passwordField' type='password'}}\n    </p>\n    <p>\n      <input {{bindAttr disabled=\"isDisabled\"}} {{action login}} class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");(function() {
+window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("{{view Courseware.MenuView}}\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/menu"] = Ember.Handlebars.compile("<h3>{{Courseware.app_name}}</h3>\n{{#unless Courseware.access_token}}\n<p>\n  <a {{action goToLogin}} class='button small'>\n    Please login first\n  </a>\n</p>\n{{/unless}}\n");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding='email' name='email' id='emailField' type='email'}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding='password' name='password' id='passwordField' type='password'}}\n    </p>\n    <p>\n      <input {{bindAttr disabled=\"isDisabled\"}} {{action login}} class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");(function() {
   Courseware.ApplicationView = Ember.View.extend({
     templateName: 'app/templates/application'
+  });
+
+}).call(this);
+(function() {
+  Courseware.MenuView = Ember.View.extend({
+    classNameBindings: ['isSlided:slided:unslided'],
+    classNames: ['unslided'],
+    elementId: 'menu',
+    isSlided: false,
+    templateName: 'app/templates/menu',
+    touchStartBinding: 'click',
+    touchMoveBinding: 'click',
+    click: function() {
+      return this.toggleProperty('isSlided');
+    }
   });
 
 }).call(this);
