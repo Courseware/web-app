@@ -29,7 +29,7 @@ Courseware.SessionController = Ember.Controller.extend
           ctrl.notifications.pushObject
             className: 'success'
             message: 'Authentication succeeded.'
-          ctrl.transitionTo('index')
+          ctrl.transitionToRoute('index')
 
       error: (xhr) ->
         ctrl.notifications.pushObject
