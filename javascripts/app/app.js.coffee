@@ -3,6 +3,7 @@
 //= require ember-data
 
 //= require_self
+//= require ./adapter
 //= require ./store
 //= require_tree ./models
 //= require_tree ./controllers
