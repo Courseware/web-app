@@ -1,0 +1,7 @@
+{{#if view.notifications.length}}
+{{#each view.notifications}}
+%div{'data-alert' => true, :bind => {:class => 'this.className this:alert-box this:round'}}
+  {{this.message}}
+  %a.close{:href => '#'} &times;
+{{/each}}
+{{/if}}
