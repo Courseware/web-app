@@ -9696,7 +9696,7 @@ if (typeof jQuery === "undefined" &&
   window.Foundation = {
     name : 'Foundation',
 
-    version : '4.0.8',
+    version : '4.1.0',
 
     // global Foundation cache object
     cache : {},
@@ -9710,6 +9710,10 @@ if (typeof jQuery === "undefined" &&
       // disable library error catching,
       // used for development only
       if (nc) this.nc = nc;
+
+
+      // check RTL
+      this.rtl = /rtl/i.test($('html').attr('dir'));
 
       // set foundation global scope
       this.scope = scope || this.scope;
@@ -9775,6 +9779,8 @@ if (typeof jQuery === "undefined" &&
 
     patch : function (lib) {
       this.fix_outer(lib);
+      lib.scope = this.scope;
+      lib.rtl = this.rtl;
     },
 
     inherit : function (scope, methods) {
@@ -10028,7 +10034,7 @@ if (typeof jQuery === "undefined" &&
   Foundation.libs.dropdown = {
     name : 'dropdown',
 
-    version : '4.0.9',
+    version : '4.1.0',
 
     settings : {
       activeClass: 'open'
@@ -10036,7 +10042,7 @@ if (typeof jQuery === "undefined" &&
 
     init : function (scope, method, options) {
       this.scope = scope || this.scope;
-      Foundation.inherit(this, 'throttle');
+      Foundation.inherit(this, 'throttle scrollLeft');
 
       if (typeof method === 'object') {
         $.extend(true, this.settings, method);
@@ -10066,7 +10072,7 @@ if (typeof jQuery === "undefined" &&
       $('*, html, body').on('click.fndtn.dropdown', function (e) {
         if (!$(e.target).data('dropdown')) {
           $('[data-dropdown-content]')
-            .css('left', '-99999px')
+            .css(Foundation.rtl ? 'right':'left', '-99999px')
             .removeClass(self.settings.activeClass);
         }
       });
@@ -10081,11 +10087,11 @@ if (typeof jQuery === "undefined" &&
     toggle : function (target, resize) {
       var dropdown = $('#' + target.data('dropdown'));
 
-      $('[data-dropdown-content]').not(dropdown).css('left', '-99999px').removeClass(this.settings.activeClass);
+      $('[data-dropdown-content]').not(dropdown).css(Foundation.rtl ? 'right':'left', '-99999px').removeClass(this.settings.activeClass);
 
       if (dropdown.hasClass(this.settings.activeClass)) {
         dropdown
-          .css('left', '-99999px')
+          .css(Foundation.rtl ? 'right':'left', '-99999px')
           .removeClass(this.settings.activeClass);
       } else {
         this
@@ -10104,11 +10110,9 @@ if (typeof jQuery === "undefined" &&
     },
 
     css : function (dropdown, target) {
-      if (dropdown.parent()[0] === $('body')[0]) {
-        var position = target.offset();
-      } else {
-        var position = target.position();
-      }
+      var position = target.position();
+      position.top += target.offsetParent().offset().top;
+      position.left += target.offsetParent().offset().left;
 
       if (this.small()) {
         dropdown.css({
@@ -10119,7 +10123,7 @@ if (typeof jQuery === "undefined" &&
           top: position.top + this.outerHeight(target)
         });
       } else {
-        if ($(window).width() > this.outerWidth(dropdown) + target.offset().left) {
+        if (!Foundation.rtl && $(window).width() > this.outerWidth(dropdown) + target.offset().left) {
           var left = position.left;
         } else {
           if (!dropdown.hasClass('right')) {
@@ -10127,6 +10131,7 @@ if (typeof jQuery === "undefined" &&
           }
           var left = position.left - (this.outerWidth(dropdown) - this.outerWidth(target));
         }
+
         dropdown.attr('style', '').css({
           position : 'absolute',
           top: position.top + this.outerHeight(target),
@@ -10445,7 +10450,7 @@ if (typeof jQuery === "undefined" &&
     toggle_bg : function (modal) {
       if ($('.reveal-modal-bg').length === 0) {
         this.settings.bg = $('<div />', {'class': this.settings.bgClass})
-          .insertAfter(modal);
+          .appendTo('body');
       }
 
       if (this.settings.bg.filter(':visible').length > 0) {
@@ -10590,7 +10595,7 @@ if (typeof jQuery === "undefined" &&
   Foundation.libs.tooltips = {
     name: 'tooltips',
 
-    version : '4.0.2',
+    version : '4.1.0',
 
     settings : {
       selector : '.has-tip',
@@ -10720,10 +10725,14 @@ if (typeof jQuery === "undefined" &&
         tip.addClass('tip-override');
         objPos(nub, -nubHeight, 'auto', 'auto', target.offset().left);
       } else {
-        objPos(tip, (target.offset().top + this.outerHeight(target) + 10), 'auto', 'auto', target.offset().left, width);
+        var left = target.offset().left;
+        if (Foundation.rtl) {
+          left = target.offset().left + target.offset().width - this.outerWidth(tip);
+        }
+        objPos(tip, (target.offset().top + this.outerHeight(target) + 10), 'auto', 'auto', left, width);
         tip.removeClass('tip-override');
         if (classes && classes.indexOf('tip-top') > -1) {
-          objPos(tip, (target.offset().top - this.outerHeight(tip)), 'auto', 'auto', target.offset().left, width)
+          objPos(tip, (target.offset().top - this.outerHeight(tip)), 'auto', 'auto', left, width)
             .removeClass('tip-override');
         } else if (classes && classes.indexOf('tip-left') > -1) {
           objPos(tip, (target.offset().top + (this.outerHeight(target) / 2) - nubHeight*2.5), 'auto', 'auto', (target.offset().left - this.outerWidth(tip) - nubHeight), width)
@@ -48683,17 +48692,30 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 (function() {
   window.Courseware = Ember.Application.create({
+    app_name: 'The Courseware Project',
     rootElement: '#content',
-    client_id: 'd519f45d71fa5a77ece72120659f77baaf5bf419b20d5c03d851e0858ce549be',
-    access_token: null
+    access_token: null,
+    notifications: []
+  });
+
+}).call(this);
+(function() {
+  Courseware.RESTAdapter = DS.RESTAdapter.reopen({
+    url: window.location.protocol + '//' + window.location.host,
+    namespace: 'v1',
+    auth_endpoint: 'oauth/authenticate',
+    client_id: 'd519f45d71fa5a77ece72120659f77baaf5bf419b20d5c03d851e0858ce549be'
+  });
+
+  Courseware.RESTAdapter.configure('plurals', {
+    'oauth/authenticate': 'oauth/authenticate'
   });
 
 }).call(this);
 (function() {
   Courseware.Store = DS.Store.extend({
     revision: 11,
-    url: 'http://api.journey.nerd.ro',
-    adapter: DS.RESTAdapter.create({
+    adapter: Courseware.RESTAdapter.create({
       bulkCommit: false
     })
   });
@@ -48710,25 +48732,72 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 }).call(this);
 (function() {
-  Courseware.ApplicationController = Ember.Controller.extend();
-
-}).call(this);
-(function() {
-  Courseware.SessionController = Ember.ObjectController.extend({
-    email: null,
-    password: null,
-    isDisabled: (function() {
-      return !this.get('email') || !this.get('password');
-    }).property('email', 'password'),
-    login: function() {
-      return console.log(this.get('email'), this.get('password'));
+  Courseware.ApplicationController = Ember.Controller.extend({
+    isHome: (function() {
+      return this.get('currentRoute') === 'index';
+    }).property('currentRoute'),
+    goToLogin: function() {
+      return this.transitionTo('session.new');
     }
   });
 
 }).call(this);
 (function() {
+  Courseware.SessionController = Ember.Controller.extend({
+    email: null,
+    password: null,
+    adapterBinding: 'store.adapter',
+    notificationsBinding: 'namespace.notifications',
+    isDisabled: (function() {
+      return !this.get('email') || !this.get('password');
+    }).property('email', 'password'),
+    login: function() {
+      var ctrl, url;
+
+      ctrl = this;
+      url = this.adapter.buildURL('oauth/authenticate');
+      url = url.replace('v1/', '');
+      this.adapter.ajax(url, 'POST', {
+        async: false,
+        context: this,
+        data: {
+          email: this.get('email'),
+          password: this.get('password'),
+          client_id: this.adapter.get('client_id')
+        },
+        success: function(json) {
+          if (!json['error'] && json['access_token']) {
+            ctrl.namespace.set('access_token', json['access_token']);
+            ctrl.notifications.pushObject({
+              className: 'success',
+              message: 'Authentication succeeded.'
+            });
+            return ctrl.transitionTo('index');
+          }
+        },
+        error: function(xhr) {
+          return ctrl.notifications.pushObject({
+            className: 'alert',
+            message: 'Authentication failed. Please try again.'
+          });
+        }
+      });
+      ctrl.set('email', null);
+      return ctrl.set('password', null);
+    }
+  });
+
+}).call(this);
+window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>{{Courseware.app_name}}</h1>\n{{#unless Courseware.access_token}}\n<p>\n  <a {{action goToLogin}} class='button small'>\n    Please login first\n  </a>\n</p>\n{{/unless}}\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding='email' name='email' id='emailField' type='email'}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding='password' name='password' id='passwordField' type='password'}}\n    </p>\n    <p>\n      <input {{bindAttr disabled=\"isDisabled\"}} {{action login}} class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");(function() {
   Courseware.ApplicationView = Ember.View.extend({
     templateName: 'app/templates/application'
+  });
+
+}).call(this);
+(function() {
+  Courseware.NotificationsView = Ember.View.extend({
+    templateName: 'app/templates/notifications',
+    notificationsBinding: 'controller.namespace.notifications'
   });
 
 }).call(this);
@@ -48742,7 +48811,7 @@ DS.RESTAdapter = DS.Adapter.extend({
   Courseware.IndexRoute = Ember.Route.extend();
 
 }).call(this);
-window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>Welcome</h1>\n{{outlet}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding='email' name='email' id='emailField' type='email'}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding='password' name='password' id='passwordField'}}\n    </p>\n    <p>\n      <input {{bindAttr disabled=\"isDisabled\"}} {{action login}} class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");(function() {
+(function() {
   Courseware.Router.reopen({
     rootURL: '/'
   });
