@@ -1,3 +1,4 @@
-%h1
-  Courseware User
-{{log content}} {{log this}}
+{{#with content.firstObject}}
+%h3 {{fullName}}
+%h4 {{email}}
+{{/with}}
