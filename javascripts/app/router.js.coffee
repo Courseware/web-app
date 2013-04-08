@@ -5,3 +5,4 @@ Courseware.Router.map ->
   @resource 'session', ->
     @route 'new'
     @route 'end'
+  @route 'user'

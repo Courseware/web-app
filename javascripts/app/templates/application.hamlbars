@@ -4,6 +4,9 @@
 %p
   %a.button.small{:_action => 'goToLogin'}
     Please login first
+{{else}}
+%p
+  {{#linkTo 'user'}} Profile {{/linkTo}}
 {{/unless}}
 
 .row
