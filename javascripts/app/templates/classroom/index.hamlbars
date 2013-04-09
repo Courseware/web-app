@@ -1,0 +1,4 @@
+{{#each content}}
+%h5
+  {{#linkTo 'classroom.show' this}}{{title}}{{/linkTo}}
+{{/each}}

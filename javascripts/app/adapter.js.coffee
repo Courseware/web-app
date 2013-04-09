@@ -14,3 +14,7 @@ Courseware.RESTAdapter = DS.RESTAdapter.reopen
 Courseware.RESTAdapter.configure 'plurals',
   # Do not pluralize authentication endpoint
   'oauth/authenticate': 'oauth/authenticate'
+
+DS.RESTAdapter.map 'Courseware.Classroom',
+  user:
+    key: 'owners'

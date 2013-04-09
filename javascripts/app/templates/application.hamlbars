@@ -7,6 +7,7 @@
 {{else}}
 %p
   {{#linkTo 'user'}} Profile {{/linkTo}}
+  {{#linkTo 'classroom.index'}} Classrooms {{/linkTo}}
 {{/unless}}
 
 .row
