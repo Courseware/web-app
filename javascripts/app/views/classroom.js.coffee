@@ -9,3 +9,6 @@ Courseware.ClassroomCollaboratorView = Ember.View.extend
 
 Courseware.ClassroomTimelineView = Ember.View.extend
   templateName: 'app/templates/classroom/timeline'
+
+Courseware.ClassroomSyllabusView = Ember.View.extend
+  templateName: 'app/templates/classroom/syllabus'

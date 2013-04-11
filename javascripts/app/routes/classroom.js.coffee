@@ -13,3 +13,7 @@ Courseware.ClassroomCollaboratorRoute = Ember.Route.extend
 Courseware.ClassroomTimelineRoute = Ember.Route.extend
   model: (params) ->
     Courseware.Timeline.find(params.classroom_id)
+
+Courseware.ClassroomSyllabusRoute = Ember.Route.extend
+  model: (params) ->
+    Courseware.Syllabus.find({classroom_id: params.classroom_id})

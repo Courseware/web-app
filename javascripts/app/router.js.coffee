@@ -11,3 +11,4 @@ Courseware.Router.map ->
    @route 'show', { path: ':classroom_id' }
    @route 'collaborators', { path: ':classroom_id/collaborators' }
    @route 'timeline', { path: ':classroom_id/timeline' }
+   @route 'syllabus', { path: ':classroom_id/syllabus' }
