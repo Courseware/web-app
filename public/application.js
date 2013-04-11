@@ -48690,39 +48690,58 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 })();
 
+/*!
+ * jQuery Cookie Plugin v1.3.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+
+(function(e){typeof define=="function"&&define.amd&&define.amd.jQuery?define(["jquery"],e):e(jQuery)})(function(e){function n(e){return e}function r(e){return decodeURIComponent(e.replace(t," "))}function i(e){e.indexOf('"')===0&&(e=e.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\/g,"\\"));try{return s.json?JSON.parse(e):e}catch(t){}}var t=/\+/g,s=e.cookie=function(t,o,u){if(o!==undefined){u=e.extend({},s.defaults,u);if(typeof u.expires=="number"){var a=u.expires,f=u.expires=new Date;f.setDate(f.getDate()+a)}return o=s.json?JSON.stringify(o):String(o),document.cookie=[encodeURIComponent(t),"=",s.raw?o:encodeURIComponent(o),u.expires?"; expires="+u.expires.toUTCString():"",u.path?"; path="+u.path:"",u.domain?"; domain="+u.domain:"",u.secure?"; secure":""].join("")}var l=s.raw?n:r,c=document.cookie.split("; "),h=t?undefined:{};for(var p=0,d=c.length;p<d;p++){var v=c[p].split("="),m=l(v.shift()),g=l(v.join("="));if(t&&t===m){h=i(g);break}t||(h[m]=i(g))}return h};s.defaults={},e.removeCookie=function(t,n){return e.cookie(t)!==undefined?(e.cookie(t,"",e.extend(n,{expires:-1})),!0):!1}}),function(){var e;e=Em.Object.extend(Em.Evented),window.Auth=e.create({authToken:null,currentUserId:null,currentUser:null,jqxhr:null,prevRoute:null,json:null,signIn:function(e){var t,n=this;return e==null&&(e={}),t=e.async!=null?e.async:!0,e.async!=null&&delete e.async,this.ajax({url:this.resolveUrl(Auth.Config.get("tokenCreateUrl")),type:"POST",data:e,async:t}).done(function(e,t,r){var i;return n.set("authToken",e[Auth.Config.get("tokenKey")]),n.set("currentUserId",e[Auth.Config.get("idKey")]),(i=Auth.Config.get("userModel"))&&n.set("currentUser",i.find(n.get("currentUserId"))),n.set("json",e),n.set("jqxhr",r),n.trigger("signInSuccess")}).fail(function(e){return n.set("jqxhr",e),n.trigger("signInError")}).always(function(e){return n.set("prevRoute",null),n.set("jqxhr",e),n.trigger("signInComplete")})},signOut:function(e){var t,n=this;return e==null&&(e={}),e[Auth.Config.get("tokenKey")]=this.get("authToken"),t=e.async!=null?e.async:!0,e.async!=null&&delete e.async,this.ajax({url:this.resolveUrl(Auth.Config.get("tokenDestroyUrl")),type:"DELETE",data:e,async:t}).done(function(e,t,r){return n.set("authToken",null),n.set("currentUserId",null),n.set("currentUser",null),n.set("jqxhr",r),n.set("json",e),n.trigger("signOutSuccess")}).fail(function(e){return n.set("jqxhr",e),n.trigger("signOutError")}).always(function(e){return n.set("prevRoute",null),n.set("jqxhr",e),n.trigger("signOutComplete")})},resolveUrl:function(e){var t;return t=Auth.Config.get("baseUrl"),t&&t[t.length-1]==="/"&&(t=t.substr(0,t.length-1)),(e!=null?e[0]:void 0)==="/"&&(e=e.substr(1,e.length)),[t,e].join("/")},resolveRedirectRoute:function(e){var t,n,r,i;return e!=="signIn"&&e!=="signOut"?null:(i=""+e[0].toUpperCase()+e.slice(1),n=Auth.Config.get("smart"+i+"Redirect"),t=Auth.Config.get(""+e+"RedirectFallbackRoute"),r=Auth.Config.get(""+e+"Route"),n?this.prevRoute==null||this.prevRoute===r?t:this.prevRoute:t)},ajax:function(e){var t,n,r,i,s,o,u,a,f,l;e==null&&(e={}),n={},n.dataType="json",e.data&&e.contentType==null&&e.type!=="GET"&&(n.contentType="application/json; charset=utf-8",e.data=JSON.stringify(e.data)),e=jQuery.extend(n,e);if(i=this.get("authToken"))switch(Auth.Config.get("requestTokenLocation")){case"param":e.data||(e.data={});switch(typeof e.data){case"object":(s=e.data)[a=Auth.Config.get("tokenKey")]||(s[a]=this.get("authToken"));break;case"string":try{t=JSON.parse(e.data),t[f=Auth.Config.get("tokenKey")]||(t[f]=this.get("authToken")),e.data=JSON.stringify(t)}catch(c){r=c}}break;case"authHeader":e.headers||(e.headers={}),(o=e.headers).Authorization||(o.Authorization=""+Auth.Config.get("requestHeaderKey")+" "+this.get("authToken"));break;case"customHeader":e.headers||(e.headers={}),(u=e.headers)[l=Auth.Config.get("requestHeaderKey")]||(u[l]=this.get("authToken"))}return jQuery.ajax(e)}})}.call(this),function(){Auth.Config=Em.Object.create({tokenCreateUrl:null,tokenDestroyUrl:null,tokenKey:null,idKey:null,userModel:null,baseUrl:null,requestTokenLocation:"param",requestHeaderKey:null,signInRoute:null,signOutRoute:null,authRedirect:!1,smartSignInRedirect:!1,smartSignOutRedirect:!1,signInRedirectFallbackRoute:"index",signOutRedirectFallbackRoute:"index",rememberMe:!1,rememberTokenKey:null,rememberPeriod:14,rememberAutoRecall:!0,rememberStorage:"cookie",urlAuthentication:!1})}.call(this),function(){Auth.Route=Em.Route.extend(Em.Evented,{redirect:function(){console.log("redirect");if(Auth.get("authToken"))return;if(Auth.Config.get("urlAuthentication")){Auth.Module.UrlAuthentication.authenticate({async:!1});if(Auth.get("authToken"))return}if(Auth.Config.get("rememberMe")&&Auth.Config.get("rememberAutoRecall")){Auth.Module.RememberMe.recall({async:!1});if(Auth.get("authToken"))return}this.trigger("authAccess");if(Auth.Config.get("authRedirect"))return Auth.set("prevRoute",this.routeName),this.transitionTo(Auth.Config.get("signInRoute"))}})}.call(this),function(){Auth.SignInController=Em.Mixin.create({registerRedirect:function(){return Auth.addObserver("authToken",this,"smartSignInRedirect")},smartSignInRedirect:function(){if(Auth.get("authToken"))return this.transitionToRoute(Auth.resolveRedirectRoute("signIn")),Auth.removeObserver("authToken",this,"smartSignInRedirect")}})}.call(this),function(){Auth.SignOutController=Em.Mixin.create({registerRedirect:function(){return Auth.addObserver("authToken",this,"smartSignOutRedirect")},smartSignOutRedirect:function(){if(!Auth.get("authToken"))return this.transitionToRoute(Auth.resolveRedirectRoute("signOut")),Auth.removeObserver("authToken",this,"smartSignOutRedirect")}})}.call(this),function(){Auth.RESTAdapter=DS.RESTAdapter.extend({ajax:function(e,t,n){return n.url=e,n.type=t,n.context=this,Auth.ajax(n)}})}.call(this),function(){Auth.Module=Em.Object.create()}.call(this),function(){Auth.Module.RememberMe=Em.Object.create({init:function(){var e=this;return Auth.on("signInSuccess",function(){return e.remember()}),Auth.on("signInError",function(){return e.forget()}),Auth.on("signOutSuccess",function(){return e.forget()})},recall:function(e){var t,n;e==null&&(e={});if(!Auth.Config.get("rememberMe"))return;if(!Auth.get("authToken")&&(n=this.retrieveToken()))return t={},e.async!=null&&(t.async=e.async),t[Auth.Config.get("rememberTokenKey")]=n,Auth.signIn(t)},remember:function(){var e;if(!Auth.Config.get("rememberMe"))return;e=Auth.get("json")[Auth.Config.get("rememberTokenKey")];if(e&&e!==this.retrieveToken())return this.storeToken(e)},forget:function(){if(!Auth.Config.get("rememberMe"))return;return this.removeToken()},retrieveToken:function(){switch(Auth.Config.get("rememberStorage")){case"localStorage":return localStorage.getItem("ember-auth-remember-me");case"cookie":return jQuery.cookie("ember-auth-remember-me")}},storeToken:function(e){switch(Auth.Config.get("rememberStorage")){case"localStorage":return localStorage.setItem("ember-auth-remember-me",e);case"cookie":return jQuery.cookie("ember-auth-remember-me",e,{expires:Auth.Config.get("rememberPeriod")})}},removeToken:function(){switch(Auth.Config.get("rememberStorage")){case"localStorage":return localStorage.removeItem("ember-auth-remember-me");case"cookie":return jQuery.removeCookie("ember-auth-remember-me")}}})}.call(this),function(){Auth.Module.UrlAuthentication=Em.Object.create({authenticate:function(e){var t,n;e==null&&(e={});if(!Auth.Config.get("urlAuthentication"))return;if(!Auth.get("authToken")&&(n=this.retrieveToken()))return t={},e.async!=null&&(t.async=e.async),t[Auth.Config.get("tokenKey")]=n,Auth.signIn(t)},retrieveToken:function(){var e;return e=$.url().param(Auth.Config.get("tokenKey")),e&&e.charAt(e.length-1)==="/"&&(e=e.slice(0,-1)),e}})}.call(this),function(){}.call(this);
 (function() {
   window.Courseware = Ember.Application.create({
     app_name: 'The Courseware Project',
     rootElement: '#content',
-    access_token: null,
-    notifications: []
+    notifications: [],
+    client_id: '763453d6ae9d07183cf8096cf6b58253ac7a806ecdad4eba4dd78adc90652d1f'
   });
 
 }).call(this);
 (function() {
-  Courseware.RESTAdapter = DS.RESTAdapter.reopen({
-    url: window.location.protocol + '//' + window.location.host,
-    namespace: 'v1',
-    client_id: '7df70da811026b87cbabd3b433811cc605ea2e3ff56111e371c984e4e999a15a',
-    access_tokenBinding: 'Courseware.access_token',
-    ajax: function(url, type, hash) {
-      hash.data = hash.data || {};
-      hash.data.access_token = this.get('access_token');
-      return this._super(url, type, hash);
+  DS.RESTAdapter.map('Courseware.Classroom', {
+    user: {
+      key: 'owners'
     }
-  });
-
-  Courseware.RESTAdapter.configure('plurals', {
-    'oauth/authenticate': 'oauth/authenticate'
   });
 
 }).call(this);
 (function() {
   Courseware.Store = DS.Store.extend({
     revision: 11,
-    adapter: Courseware.RESTAdapter.create({
-      bulkCommit: false
+    adapter: Auth.RESTAdapter.create({
+      bulkCommit: false,
+      url: 'v1'
     })
+  });
+
+}).call(this);
+(function() {
+  Courseware.Classroom = DS.Model.extend({
+    description: DS.attr('string'),
+    title: DS.attr('string'),
+    owners: DS.belongsTo('Courseware.User')
+  });
+
+}).call(this);
+(function() {
+  Courseware.Collaborator = DS.Model.extend();
+
+}).call(this);
+(function() {
+  Courseware.Timeline = DS.Model.extend({
+    recipientType: DS.attr('string'),
+    trackableType: DS.attr('string')
   });
 
 }).call(this);
@@ -48738,55 +48757,27 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 }).call(this);
 (function() {
-  Courseware.ApplicationController = Ember.Controller.extend({
-    goToLogin: function() {
-      return this.transitionTo('session.new');
-    }
-  });
+  Courseware.ApplicationController = Ember.Controller.extend();
 
 }).call(this);
 (function() {
-  Courseware.SessionController = Ember.Controller.extend({
+  Courseware.ClassroomController = Ember.Controller.extend();
+
+}).call(this);
+(function() {
+  Courseware.SignInController = Ember.ObjectController.extend(Auth.SignInController, {
     email: null,
     password: null,
-    adapterBinding: 'store.adapter',
-    notificationsBinding: 'namespace.notifications',
     isDisabled: (function() {
       return !this.get('email') || !this.get('password');
     }).property('email', 'password'),
-    login: function() {
-      var ctrl, url;
-
-      ctrl = this;
-      url = this.adapter.buildURL('oauth/authenticate');
-      url = url.replace('v1/', '');
-      this.adapter.ajax(url, 'POST', {
-        async: false,
-        context: this,
-        data: {
-          email: this.get('email'),
-          password: this.get('password'),
-          client_id: this.adapter.get('client_id')
-        },
-        success: function(json) {
-          if (!json['error'] && json['access_token']) {
-            ctrl.namespace.set('access_token', json['access_token']);
-            ctrl.notifications.pushObject({
-              className: 'success',
-              message: 'Authentication succeeded.'
-            });
-            return ctrl.transitionTo('index');
-          }
-        },
-        error: function(xhr) {
-          return ctrl.notifications.pushObject({
-            className: 'alert',
-            message: 'Authentication failed. Please try again.'
-          });
-        }
+    signIn: function() {
+      this.registerRedirect();
+      return Auth.signIn({
+        email: this.get('email'),
+        password: this.get('password'),
+        client_id: Courseware.client_id
       });
-      ctrl.set('email', null);
-      return ctrl.set('password', null);
     }
   });
 
@@ -48795,9 +48786,27 @@ DS.RESTAdapter = DS.Adapter.extend({
   Courseware.UserController = Ember.Controller.extend();
 
 }).call(this);
-window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>{{Courseware.app_name}}</h1>\n{{#unless Courseware.access_token}}\n<p>\n  <a {{action goToLogin}} class='button small'>\n    Please login first\n  </a>\n</p>\n{{else}}\n<p>\n  {{#linkTo 'user'}} Profile {{/linkTo}}\n</p>\n{{/unless}}\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding='email' name='email' id='emailField' type='email'}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding='password' name='password' id='passwordField' type='password'}}\n    </p>\n    <p>\n      <input {{bindAttr disabled=\"isDisabled\"}} {{action login}} class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/user"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{fullName}}</h3>\n<h4>{{email}}</h4>\n{{/with}}\n");(function() {
+window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>{{Courseware.app_name}}</h1>\n<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      {{#linkTo 'user'}} Profile {{/linkTo}}\n      {{#linkTo 'classroom.index'}} Classrooms {{/linkTo}}\n    </p>\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/classroom/collaborator"] = Ember.Handlebars.compile("{{#each model}}\n{{/each}}\n");window.Ember.TEMPLATES["app/templates/classroom/index"] = Ember.Handlebars.compile("{{#each content}}\n<h5>\n  {{#linkTo 'classroom.show' this}}{{title}}{{/linkTo}}\n</h5>\n{{/each}}\n");window.Ember.TEMPLATES["app/templates/classroom/show"] = Ember.Handlebars.compile("<h5>\n  {{title}}\n</h5>\n<hr>\n<medium>\n  {{description}}\n</medium>\n<small>\n  {{#linkTo 'classroom.collaborators' this}} Collaborators {{/linkTo}}|\n  {{#linkTo 'classroom.timeline' this}} Timeline {{/linkTo}}\n</small>\n");window.Ember.TEMPLATES["app/templates/classroom/timeline"] = Ember.Handlebars.compile("");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/signin"] = Ember.Handlebars.compile("<form>\n  <label for='emailField'>Email</label>\n  {{view Ember.TextField valueBinding='email' id='emailField' type='email'}}\n  <label for='passwordField'>Password</label>\n  {{view Ember.TextField valueBinding='password' id='passwordField' type='password'}}\n  <button {{bindAttr disabled=\"isDisabled\"}} {{action signIn}} class='small success' type='submit'>\n    Sign In\n  </button>\n</form>\n");window.Ember.TEMPLATES["app/templates/user"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{fullName}}</h3>\n<h4>{{email}}</h4>\n{{/with}}\n");(function() {
   Courseware.ApplicationView = Ember.View.extend({
     templateName: 'app/templates/application'
+  });
+
+}).call(this);
+(function() {
+  Courseware.ClassroomIndexView = Ember.View.extend({
+    templateName: 'app/templates/classroom/index'
+  });
+
+  Courseware.ClassroomShowView = Ember.View.extend({
+    templateName: 'app/templates/classroom/show'
+  });
+
+  Courseware.ClassroomCollaboratorView = Ember.View.extend({
+    templateName: 'app/templates/classroom/collaborator'
+  });
+
+  Courseware.ClassroomTimelineView = Ember.View.extend({
+    templateName: 'app/templates/classroom/timeline'
   });
 
 }).call(this);
@@ -48809,8 +48818,8 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
 
 }).call(this);
 (function() {
-  Courseware.SessionView = Ember.View.extend({
-    templateName: 'app/templates/session/new'
+  Courseware.SignInView = Ember.View.extend({
+    templateName: 'app/templates/signin'
   });
 
 }).call(this);
@@ -48821,7 +48830,37 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
 
 }).call(this);
 (function() {
+  Courseware.ClassroomIndexRoute = Ember.Route.extend({
+    model: function() {
+      return Courseware.Classroom.find();
+    }
+  });
+
+  Courseware.ClassroomShowRoute = Ember.Route.extend({
+    model: function(params) {
+      return Courseware.Classroom.find(params.classroom_id);
+    }
+  });
+
+  Courseware.ClassroomCollaboratorRoute = Ember.Route.extend({
+    model: function(params) {
+      return Courseware.Collaborator.find(params.classroom_id);
+    }
+  });
+
+  Courseware.ClassroomTimelineRoute = Ember.Route.extend({
+    model: function(params) {
+      return Courseware.Timeline.find(params.classroom_id);
+    }
+  });
+
+}).call(this);
+(function() {
   Courseware.IndexRoute = Ember.Route.extend();
+
+}).call(this);
+(function() {
+  Courseware.SignInRoute = Ember.Route.extend();
 
 }).call(this);
 (function() {
@@ -48838,11 +48877,30 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
   });
 
   Courseware.Router.map(function() {
-    this.resource('session', function() {
-      this.route('new');
-      return this.route('end');
+    this.route('sign_in');
+    this.route('user');
+    return this.resource('classroom', function() {
+      this.route('index');
+      this.route('show', {
+        path: ':classroom_id'
+      });
+      this.route('collaborators', {
+        path: ':classroom_id/collaborators'
+      });
+      return this.route('timeline', {
+        path: ':classroom_id/timeline'
+      });
     });
-    return this.route('user');
+  });
+
+}).call(this);
+(function() {
+  Auth.Config.reopen({
+    tokenCreateUrl: '/oauth/authenticate',
+    tokenKey: 'access_token',
+    signInRoute: 'sign_in',
+    smartSignInRedirect: true,
+    signInRedirectFallbackRoute: '/'
   });
 
 }).call(this);
