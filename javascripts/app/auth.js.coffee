@@ -1,6 +1,7 @@
 Auth.Config.reopen
   tokenCreateUrl: '/oauth/authenticate'
   tokenKey: 'access_token'
-  signInRoute: 'sign_in'
+  authRedirect: true
   smartSignInRedirect: true
-  signInRedirectFallbackRoute: '/'
+  signInRoute: 'sign_in'
+  signInRedirectFallbackRoute: 'user'
