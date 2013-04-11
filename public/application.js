@@ -48830,25 +48830,25 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
 
 }).call(this);
 (function() {
-  Courseware.ClassroomIndexRoute = Ember.Route.extend({
+  Courseware.ClassroomIndexRoute = Auth.Route.extend({
     model: function() {
       return Courseware.Classroom.find();
     }
   });
 
-  Courseware.ClassroomShowRoute = Ember.Route.extend({
+  Courseware.ClassroomShowRoute = Auth.Route.extend({
     model: function(params) {
       return Courseware.Classroom.find(params.classroom_id);
     }
   });
 
-  Courseware.ClassroomCollaboratorRoute = Ember.Route.extend({
+  Courseware.ClassroomCollaboratorRoute = Auth.Route.extend({
     model: function(params) {
       return Courseware.Collaborator.find(params.classroom_id);
     }
   });
 
-  Courseware.ClassroomTimelineRoute = Ember.Route.extend({
+  Courseware.ClassroomTimelineRoute = Auth.Route.extend({
     model: function(params) {
       return Courseware.Timeline.find(params.classroom_id);
     }
@@ -48856,7 +48856,7 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
 
 }).call(this);
 (function() {
-  Courseware.IndexRoute = Ember.Route.extend();
+  Courseware.IndexRoute = Auth.Route.extend();
 
 }).call(this);
 (function() {
@@ -48864,7 +48864,7 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
 
 }).call(this);
 (function() {
-  Courseware.UserRoute = Ember.Route.extend({
+  Courseware.UserRoute = Auth.Route.extend({
     model: function() {
       return Courseware.User.find();
     }
@@ -48898,9 +48898,13 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
   Auth.Config.reopen({
     tokenCreateUrl: '/oauth/authenticate',
     tokenKey: 'access_token',
-    signInRoute: 'sign_in',
+    authRedirect: true,
     smartSignInRedirect: true,
-    signInRedirectFallbackRoute: '/'
+    signInRoute: 'sign_in',
+    signInRedirectFallbackRoute: 'user',
+    rememberMe: true,
+    rememberStorage: 'localStorage',
+    rememberTokenKey: 'access_token'
   });
 
 }).call(this);
