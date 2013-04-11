@@ -1,14 +1,10 @@
 %h1 {{Courseware.app_name}}
 
-{{#unless Courseware.access_token}}
-%p
-  %a.button.small{:_action => 'goToLogin'}
-    Please login first
-{{else}}
-%p
-  {{#linkTo 'user'}} Profile {{/linkTo}}
-  {{#linkTo 'classroom.index'}} Classrooms {{/linkTo}}
-{{/unless}}
+.row
+  .large-6.columns
+    %p
+      {{#linkTo 'user'}} Profile {{/linkTo}}
+      {{#linkTo 'classroom.index'}} Classrooms {{/linkTo}}
 
 .row
   .large-6.columns

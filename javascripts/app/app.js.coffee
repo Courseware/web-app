@@ -1,6 +1,7 @@
 //= require handlebars
 //= require ember
 //= require ember-data
+//= require ../ember-auth.min.js
 
 //= require_self
 //= require ./adapter
@@ -11,9 +12,10 @@
 //= require_tree ./views
 //= require_tree ./routes
 //= require ./router
+//= require ./auth
 
 window.Courseware = Ember.Application.create
   app_name: 'The Courseware Project'
   rootElement: '#content'
-  access_token: null
   notifications: []
+  client_id: '763453d6ae9d07183cf8096cf6b58253ac7a806ecdad4eba4dd78adc90652d1f'
