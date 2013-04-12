@@ -13,4 +13,4 @@ Courseware.SignInController = Ember.ObjectController.extend Auth.SignInControlle
     Auth.signIn
       email: @get 'email'
       password: @get 'password'
-      client_id: Courseware.client_id
+      client_id: @namespace.get('client_id')
