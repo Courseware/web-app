@@ -1,1 +1,1 @@
-Courseware.IndexRoute = Ember.Route.extend()
+Courseware.IndexRoute = Auth.Route.extend()
