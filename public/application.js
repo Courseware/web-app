@@ -48979,17 +48979,17 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 }).call(this);
 (function() {
-  DS.RESTAdapter.map('Courseware.Classroom', {
-    user: {
-      key: 'owners'
-    }
+  Courseware.RESTAdapter = Auth.RESTAdapter.extend();
+
+  Courseware.RESTAdapter.configure('plurals', {
+    'syllabus': 'syllabus'
   });
 
 }).call(this);
 (function() {
   Courseware.Store = DS.Store.extend({
     revision: 11,
-    adapter: Auth.RESTAdapter.create({
+    adapter: Courseware.RESTAdapter.create({
       bulkCommit: false,
       url: 'v1'
     })
@@ -48999,8 +48999,7 @@ DS.RESTAdapter = DS.Adapter.extend({
 (function() {
   Courseware.Classroom = DS.Model.extend({
     description: DS.attr('string'),
-    title: DS.attr('string'),
-    owners: DS.belongsTo('Courseware.User')
+    title: DS.attr('string')
   });
 
 }).call(this);
@@ -49039,7 +49038,9 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 }).call(this);
 (function() {
-  Courseware.ClassroomController = Ember.Controller.extend();
+  Courseware.ClassroomsIndexController = Ember.Controller.extend();
+
+  Courseware.ClassroomsShowController = Ember.Controller.extend();
 
 }).call(this);
 (function() {
@@ -49054,45 +49055,37 @@ DS.RESTAdapter = DS.Adapter.extend({
       return Auth.signIn({
         email: this.get('email'),
         password: this.get('password'),
-        client_id: Courseware.client_id
+        client_id: this.namespace.get('client_id')
       });
     }
   });
 
 }).call(this);
 (function() {
+  Courseware.SyllabusController = Ember.Controller.extend();
+
+}).call(this);
+(function() {
   Courseware.UserController = Ember.Controller.extend();
 
 }).call(this);
-window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>{{Courseware.app_name}}</h1>\n<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      {{#linkTo 'user'}} Profile {{/linkTo}}\n      {{#linkTo 'classroom.index'}} Classrooms {{/linkTo}}\n    </p>\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/classroom/collaborator"] = Ember.Handlebars.compile("{{#each model}}\n{{/each}}\n");window.Ember.TEMPLATES["app/templates/classroom/index"] = Ember.Handlebars.compile("{{#each content}}\n<h5>\n  {{#linkTo 'classroom.show' this}}{{title}}{{/linkTo}}\n</h5>\n{{/each}}\n");window.Ember.TEMPLATES["app/templates/classroom/show"] = Ember.Handlebars.compile("<h5>\n  {{title}}\n</h5>\n<hr>\n<medium>\n  {{description}}\n</medium>\n<small>\n  {{#linkTo 'classroom.collaborators' this}} Collaborators {{/linkTo}}|\n  {{#linkTo 'classroom.timeline' this}} Timeline {{/linkTo}}\n</small>\n");(function() {
-  Syllabus;
-
-}).call(this);
-window.Ember.TEMPLATES["app/templates/classroom/timeline"] = Ember.Handlebars.compile("");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/signin"] = Ember.Handlebars.compile("<form>\n  <label for='emailField'>Email</label>\n  {{view Ember.TextField valueBinding='email' id='emailField' type='email'}}\n  <label for='passwordField'>Password</label>\n  {{view Ember.TextField valueBinding='password' id='passwordField' type='password'}}\n  <button {{bindAttr disabled=\"isDisabled\"}} {{action signIn}} class='small success' type='submit'>\n    Sign In\n  </button>\n</form>\n");window.Ember.TEMPLATES["app/templates/user"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{fullName}}</h3>\n<h4>{{email}}</h4>\n{{/with}}\n");(function() {
+window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>{{Courseware.app_name}}</h1>\n<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      {{#linkTo user}} Profile {{/linkTo}}\n      {{#linkTo classrooms.index}} Classrooms {{/linkTo}}\n    </p>\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/classrooms/index"] = Ember.Handlebars.compile("<h2>Classrooms</h2>\n<hr>\n{{#each content}}\n<h5>\n  {{#linkTo classrooms.show this}}{{title}}{{/linkTo}}\n</h5>\n{{/each}}\n");window.Ember.TEMPLATES["app/templates/classrooms/layout"] = Ember.Handlebars.compile("{{outlet}}\n");window.Ember.TEMPLATES["app/templates/classrooms/show"] = Ember.Handlebars.compile("<h5>\n  {{content.title}}\n</h5>\n<hr>\n<medium>\n  {{content.description}}\n</medium>\n<small>\n  {{#linkTo syllabus content}}Syllabus{{/linkTo}}\n</small>\n");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/signin"] = Ember.Handlebars.compile("<form>\n  <label for='emailField'>Email</label>\n  {{view Ember.TextField valueBinding='email' id='emailField' type='email'}}\n  <label for='passwordField'>Password</label>\n  {{view Ember.TextField valueBinding='password' id='passwordField' type='password'}}\n  <button {{bindAttr disabled=\"isDisabled\"}} {{action signIn}} class='small success' type='submit'>\n    Sign In\n  </button>\n</form>\n");window.Ember.TEMPLATES["app/templates/syllabus"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{title}}</h3>\n<p>{{content}}</p>\n{{/with}}\n");window.Ember.TEMPLATES["app/templates/user"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{fullName}}</h3>\n<h4>{{email}}</h4>\n{{/with}}\n");(function() {
   Courseware.ApplicationView = Ember.View.extend({
     templateName: 'app/templates/application'
   });
 
 }).call(this);
 (function() {
-  Courseware.ClassroomIndexView = Ember.View.extend({
-    templateName: 'app/templates/classroom/index'
+  Courseware.ClassroomsView = Ember.View.extend({
+    templateName: 'app/templates/classrooms/layout'
   });
 
-  Courseware.ClassroomShowView = Ember.View.extend({
-    templateName: 'app/templates/classroom/show'
+  Courseware.ClassroomsIndexView = Ember.View.extend({
+    templateName: 'app/templates/classrooms/index'
   });
 
-  Courseware.ClassroomCollaboratorView = Ember.View.extend({
-    templateName: 'app/templates/classroom/collaborator'
-  });
-
-  Courseware.ClassroomTimelineView = Ember.View.extend({
-    templateName: 'app/templates/classroom/timeline'
-  });
-
-  Courseware.ClassroomSyllabusView = Ember.View.extend({
-    templateName: 'app/templates/classroom/syllabus'
+  Courseware.ClassroomsShowView = Ember.View.extend({
+    templateName: 'app/templates/classrooms/show'
   });
 
 }).call(this);
@@ -49110,41 +49103,27 @@ window.Ember.TEMPLATES["app/templates/classroom/timeline"] = Ember.Handlebars.co
 
 }).call(this);
 (function() {
+  Courseware.SyllabusView = Ember.View.extend({
+    templateName: 'app/templates/syllabus'
+  });
+
+}).call(this);
+(function() {
   Courseware.UserView = Ember.View.extend({
     templateName: 'app/templates/user'
   });
 
 }).call(this);
 (function() {
-  Courseware.ClassroomIndexRoute = Auth.Route.extend({
+  Courseware.ClassroomsIndexRoute = Auth.Route.extend({
     model: function() {
       return Courseware.Classroom.find();
     }
   });
 
-  Courseware.ClassroomShowRoute = Auth.Route.extend({
+  Courseware.ClassroomsShowRoute = Auth.Route.extend({
     model: function(params) {
       return Courseware.Classroom.find(params.classroom_id);
-    }
-  });
-
-  Courseware.ClassroomCollaboratorRoute = Auth.Route.extend({
-    model: function(params) {
-      return Courseware.Collaborator.find(params.classroom_id);
-    }
-  });
-
-  Courseware.ClassroomTimelineRoute = Auth.Route.extend({
-    model: function(params) {
-      return Courseware.Timeline.find(params.classroom_id);
-    }
-  });
-
-  Courseware.ClassroomSyllabusRoute = Ember.Route.extend({
-    model: function(params) {
-      return Courseware.Syllabus.find({
-        classroom_id: params.classroom_id
-      });
     }
   });
 
@@ -49155,6 +49134,23 @@ window.Ember.TEMPLATES["app/templates/classroom/timeline"] = Ember.Handlebars.co
 }).call(this);
 (function() {
   Courseware.SignInRoute = Ember.Route.extend();
+
+}).call(this);
+(function() {
+  Courseware.SyllabusRoute = Ember.Route.extend({
+    model: function(params) {
+      return Courseware.Classroom.find(params.classroom_id);
+    },
+    setupController: function(controller, model) {
+      var syllabus;
+
+      syllabus = Courseware.Syllabus.find({
+        classroom_id: model.get('id')
+      });
+      syllabus.set('classroom', model);
+      return controller.set('content', syllabus);
+    }
+  });
 
 }).call(this);
 (function() {
@@ -49173,19 +49169,15 @@ window.Ember.TEMPLATES["app/templates/classroom/timeline"] = Ember.Handlebars.co
   Courseware.Router.map(function() {
     this.route('sign_in');
     this.route('user');
-    return this.resource('classroom', function() {
-      this.route('index');
-      this.route('show', {
+    this.resource('syllabus', {
+      path: 'classrooms/:classroom_id/syllabus'
+    });
+    return this.resource('classrooms', function() {
+      this.route('index', {
+        path: ''
+      });
+      return this.route('show', {
         path: ':classroom_id'
-      });
-      this.route('collaborators', {
-        path: ':classroom_id/collaborators'
-      });
-      this.route('timeline', {
-        path: ':classroom_id/timeline'
-      });
-      return this.route('syllabus', {
-        path: ':classroom_id/syllabus'
       });
     });
   });
