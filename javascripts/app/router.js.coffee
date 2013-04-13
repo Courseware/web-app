@@ -4,7 +4,7 @@ Courseware.Router.reopen
 Courseware.Router.map ->
   @route 'sign_in'
   @route 'user'
-  @resource 'syllabus', { path: 'classrooms/:classroom_id/syllabus' }
   @resource 'classrooms', ->
    @route 'index', { path: '' }
    @route 'show', { path: ':classroom_id' }
+   @resource 'syllabus', { path: ':classroom_id/syllabus' }
