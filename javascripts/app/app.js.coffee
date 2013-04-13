@@ -1,7 +1,7 @@
 //= require handlebars
 //= require ember
 //= require ember-data
-//= require ../ember-auth.min.js
+//= require ../lib/ember-auth
 
 //= require_self
 //= require ./adapter
