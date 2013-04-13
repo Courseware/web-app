@@ -1,14 +1,8 @@
-Courseware.ClassroomIndexView = Ember.View.extend
-  templateName: 'app/templates/classroom/index'
+Courseware.ClassroomsView = Ember.View.extend
+  templateName: 'app/templates/classrooms/layout'
 
-Courseware.ClassroomShowView = Ember.View.extend
-  templateName: 'app/templates/classroom/show'
+Courseware.ClassroomsIndexView = Ember.View.extend
+  templateName: 'app/templates/classrooms/index'
 
-Courseware.ClassroomCollaboratorView = Ember.View.extend
-  templateName: 'app/templates/classroom/collaborator'
-
-Courseware.ClassroomTimelineView = Ember.View.extend
-  templateName: 'app/templates/classroom/timeline'
-
-Courseware.ClassroomSyllabusView = Ember.View.extend
-  templateName: 'app/templates/classroom/syllabus'
+Courseware.ClassroomsShowView = Ember.View.extend
+  templateName: 'app/templates/classrooms/show'

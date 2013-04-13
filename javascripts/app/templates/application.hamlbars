@@ -3,8 +3,8 @@
 .row
   .large-6.columns
     %p
-      {{#linkTo 'user'}} Profile {{/linkTo}}
-      {{#linkTo 'classroom.index'}} Classrooms {{/linkTo}}
+      {{#linkTo user}} Profile {{/linkTo}}
+      {{#linkTo classrooms.index}} Classrooms {{/linkTo}}
 
 .row
   .large-6.columns

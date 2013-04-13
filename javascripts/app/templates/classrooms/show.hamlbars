@@ -1,0 +1,8 @@
+%h5
+  {{content.title}}
+%hr
+%medium
+  {{content.description}}
+
+%small
+  {{#linkTo syllabus content}}Syllabus{{/linkTo}}

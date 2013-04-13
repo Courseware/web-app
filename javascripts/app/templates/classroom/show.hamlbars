@@ -1,9 +1,0 @@
-%h5
-  {{title}}
-%hr
-%medium
-  {{description}}
-
-%small
-  {{#linkTo 'classroom.collaborators' this}} Collaborators {{/linkTo}}|
-  {{#linkTo 'classroom.timeline' this}} Timeline {{/linkTo}}

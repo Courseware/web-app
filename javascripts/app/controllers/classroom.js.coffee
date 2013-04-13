@@ -1,1 +1,3 @@
-Courseware.ClassroomController = Ember.Controller.extend()
+Courseware.ClassroomsIndexController = Ember.Controller.extend()
+
+Courseware.ClassroomsShowController = Ember.Controller.extend()
