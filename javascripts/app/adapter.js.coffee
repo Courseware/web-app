@@ -1,3 +1,4 @@
-DS.RESTAdapter.map 'Courseware.Classroom',
-  user:
-    key: 'owners'
+Courseware.RESTAdapter = Auth.RESTAdapter.extend()
+
+Courseware.RESTAdapter.configure 'plurals',
+  'syllabus': 'syllabus'
