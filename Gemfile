@@ -22,6 +22,7 @@ group :assets do
   gem 'handlebars_assets'
   gem 'hamlbars'
   gem 'handlebars-source', '>= 1.0.0.rc3'
+  gem 'ember-auth-source', :github => 'heartsentwined/ember-auth'
 end
 
 group :development, :test do

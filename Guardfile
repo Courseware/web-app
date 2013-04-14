@@ -5,6 +5,7 @@ require 'sprockets'
 require 'haml'
 require 'handlebars_assets'
 require 'hamlbars/ext'
+require 'ember-auth/source'
 
 # Load hamlbars helpers
 Haml::Compiler.send(:include, Hamlbars::Ext::Compiler)
@@ -25,7 +26,8 @@ guard 'sprockets', {
       Pathname.new(Gem::Specification.find_by_name('zurb-foundation').gem_dir).join('js'),
       ::Ember::Source.bundled_path_for(''),
       ::Ember::Data::Source.bundled_path_for(''),
-      File.dirname(Handlebars::Source.bundled_path)
+      File.dirname(Handlebars::Source.bundled_path),
+      File.dirname(EmberAuth::Source.bundled_path)
     ],
     :root_file => 'public/application.js'
   } do

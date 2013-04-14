@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/heartsentwined/ember-auth.git
+  revision: 62f3c735e212f4c3e4494aedb1418810f29f72fc
+  specs:
+    ember-auth-source (3.1.1)
+      ember-source (>= 0.0.2, != 1.0.0.rc1.2, != 1.0.0.rc1.1, != 1.0.0.rc1.0.0, != 1.0.0.pre4.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -13,7 +20,7 @@ GEM
       sass (~> 3.1)
     ember-data-source (0.0.5)
       ember-source
-    ember-source (0.0.5)
+    ember-source (1.0.0.rc2.2)
       handlebars-source (>= 1.0.0.rc3, < 1.0.0.rc4)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -90,6 +97,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-script
+  ember-auth-source!
   ember-data-source
   ember-source
   guard-compass
