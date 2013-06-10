@@ -1,0 +1,9 @@
+%form
+  %label{:for => :emailField} Email
+  {{view Ember.TextField valueBinding='email' id='emailField' type='email'}}
+
+  %label{:for => :passwordField} Password
+  {{view Ember.TextField valueBinding='password' id='passwordField' type='password'}}
+
+  %button.small.success{:_action => 'signIn', :bind => {:disabled => :isDisabled}, :type => :submit}
+    Sign In

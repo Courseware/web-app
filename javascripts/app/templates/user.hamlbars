@@ -1,0 +1,4 @@
+{{#with content.firstObject}}
+%h3 {{fullName}}
+%h4 {{email}}
+{{/with}}

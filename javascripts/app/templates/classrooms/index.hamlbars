@@ -1,0 +1,6 @@
+%h2 Classrooms
+%hr
+{{#each content}}
+%h5
+  {{#linkTo classrooms.show this}}{{title}}{{/linkTo}}
+{{/each}}

@@ -1,0 +1,4 @@
+{{#with content.firstObject}}
+%h3 {{title}}
+%p {{content}}
+{{/with}}

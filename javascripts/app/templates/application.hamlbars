@@ -1,4 +1,10 @@
-{{view Courseware.MenuView}}
+%h1 {{Courseware.app_name}}
+
+.row
+  .large-6.columns
+    %p
+      {{#linkTo user}} Profile {{/linkTo}}
+      {{#linkTo classrooms.index}} Classrooms {{/linkTo}}
 
 .row
   .large-6.columns
