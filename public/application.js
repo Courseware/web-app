@@ -49704,7 +49704,7 @@ DS.RESTAdapter = DS.Adapter.extend({
     app_name: 'The Courseware Project',
     rootElement: '#content',
     notifications: [],
-    client_id: '763453d6ae9d07183cf8096cf6b58253ac7a806ecdad4eba4dd78adc90652d1f'
+    client_id: '75912ad5297229ceb49774f61956668656bd0f47a5ed98ef72f89b1c39a001af'
   });
 
 }).call(this);
@@ -49721,7 +49721,8 @@ DS.RESTAdapter = DS.Adapter.extend({
     revision: 11,
     adapter: Courseware.RESTAdapter.create({
       bulkCommit: false,
-      url: 'v1'
+      url: 'http://api.coursewa.re',
+      namespace: 'v1'
     })
   });
 
@@ -49734,21 +49735,10 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 }).call(this);
 (function() {
-  Courseware.Collaborator = DS.Model.extend();
-
-}).call(this);
-(function() {
   Courseware.Syllabus = DS.Model.extend({
     title: DS.attr('string'),
     content: DS.attr('string'),
     intro: DS.attr('string')
-  });
-
-}).call(this);
-(function() {
-  Courseware.Timeline = DS.Model.extend({
-    recipientType: DS.attr('string'),
-    trackableType: DS.attr('string')
   });
 
 }).call(this);
@@ -49764,31 +49754,28 @@ DS.RESTAdapter = DS.Adapter.extend({
 
 }).call(this);
 (function() {
-<<<<<<< HEAD
   Courseware.ApplicationController = Ember.Controller.extend({
     goToLogin: function() {
       return this.transitionToRoute('session.new');
     }
   });
-=======
-  Courseware.ApplicationController = Ember.Controller.extend();
 
 }).call(this);
 (function() {
   Courseware.ClassroomsIndexController = Ember.Controller.extend();
 
   Courseware.ClassroomsShowController = Ember.Controller.extend();
->>>>>>> journey/web_app_modifications
 
 }).call(this);
 (function() {
-  Courseware.SignInController = Ember.ObjectController.extend(Auth.SignInController, {
+  Courseware.SessionController = Ember.Controller.extend({
     email: null,
     password: null,
+    adapterBinding: 'store.adapter',
+    notificationsBinding: 'namespace.notifications',
     isDisabled: (function() {
       return !this.get('email') || !this.get('password');
     }).property('email', 'password'),
-<<<<<<< HEAD
     login: function() {
       var ctrl, url;
 
@@ -49819,22 +49806,31 @@ DS.RESTAdapter = DS.Adapter.extend({
             message: 'Authentication failed. Please try again.'
           });
         }
-=======
+      });
+      ctrl.set('email', null);
+      return ctrl.set('password', null);
+    }
+  });
+
+}).call(this);
+(function() {
+  Courseware.SignInController = Ember.ObjectController.extend(Auth.SignInController, {
+    email: null,
+    password: null,
+    isDisabled: (function() {
+      return !this.get('email') || !this.get('password');
+    }).property('email', 'password'),
     signIn: function() {
       this.registerRedirect();
       return Auth.signIn({
         email: this.get('email'),
         password: this.get('password'),
         client_id: this.namespace.get('client_id')
->>>>>>> journey/web_app_modifications
       });
     }
   });
 
 }).call(this);
-<<<<<<< HEAD
-window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("{{view Courseware.MenuView}}\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/menu"] = Ember.Handlebars.compile("<h3>{{Courseware.app_name}}</h3>\n{{#unless Courseware.access_token}}\n<p>\n  <a {{action goToLogin}} class='button small'>\n    Please login first\n  </a>\n</p>\n{{/unless}}\n");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/session/new"] = Ember.Handlebars.compile("<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      <label for='emailField'>Email</label>\n      {{view Ember.TextField valueBinding='email' name='email' id='emailField' type='email'}}\n    </p>\n    <p>\n      <label for='passwordField'>Password</label>\n      {{view Ember.TextField valueBinding='password' name='password' id='passwordField' type='password'}}\n    </p>\n    <p>\n      <input {{bindAttr disabled=\"isDisabled\"}} {{action login}} class='button success small' type='submit'>\n    </p>\n  </div>\n</div>\n");(function() {
-=======
 (function() {
   Courseware.SyllabusController = Ember.Controller.extend();
 
@@ -49843,15 +49839,27 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
   Courseware.UserController = Ember.Controller.extend();
 
 }).call(this);
-window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>{{Courseware.app_name}}</h1>\n<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      {{#linkTo user}} Profile {{/linkTo}}\n      {{#linkTo classrooms.index}} Classrooms {{/linkTo}}\n    </p>\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/classrooms/index"] = Ember.Handlebars.compile("<h2>Classrooms</h2>\n<hr>\n{{#each content}}\n<h5>\n  {{#linkTo classrooms.show this}}{{title}}{{/linkTo}}\n</h5>\n{{/each}}\n");window.Ember.TEMPLATES["app/templates/classrooms/layout"] = Ember.Handlebars.compile("{{outlet}}\n");window.Ember.TEMPLATES["app/templates/classrooms/show"] = Ember.Handlebars.compile("<h5>\n  {{content.title}}\n</h5>\n<hr>\n<medium>\n  {{content.description}}\n</medium>\n<small>\n  {{#linkTo syllabus content}}Syllabus{{/linkTo}}\n</small>\n");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/signin"] = Ember.Handlebars.compile("<form>\n  <label for='emailField'>Email</label>\n  {{view Ember.TextField valueBinding='email' id='emailField' type='email'}}\n  <label for='passwordField'>Password</label>\n  {{view Ember.TextField valueBinding='password' id='passwordField' type='password'}}\n  <button {{bindAttr disabled=\"isDisabled\"}} {{action signIn}} class='small success' type='submit'>\n    Sign In\n  </button>\n</form>\n");window.Ember.TEMPLATES["app/templates/syllabus"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{title}}</h3>\n<p>{{content}}</p>\n{{/with}}\n");window.Ember.TEMPLATES["app/templates/user"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{fullName}}</h3>\n<h4>{{email}}</h4>\n{{/with}}\n");(function() {
->>>>>>> journey/web_app_modifications
+window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("<h1>{{Courseware.app_name}}</h1>\n<div class='row'>\n  <div class='large-6 columns'>\n    <p>\n      {{#linkTo user}} Profile {{/linkTo}}\n      {{#linkTo classrooms.index}} Classrooms {{/linkTo}}\n    </p>\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{view Courseware.NotificationsView}}\n  </div>\n</div>\n<div class='row'>\n  <div class='large-6 columns'>\n    {{outlet}}\n  </div>\n</div>\n");window.Ember.TEMPLATES["app/templates/classrooms/index"] = Ember.Handlebars.compile("<h2>Classrooms</h2>\n<hr>\n{{#each content}}\n<h5>\n  {{#linkTo classrooms.show this}}{{title}}{{/linkTo}}\n</h5>\n{{/each}}\n");window.Ember.TEMPLATES["app/templates/classrooms/layout"] = Ember.Handlebars.compile("{{outlet}}\n");window.Ember.TEMPLATES["app/templates/classrooms/show"] = Ember.Handlebars.compile("<h5>\n  {{content.title}}\n</h5>\n<hr>\n<medium>\n  {{content.description}}\n</medium>\n<small>\n  {{#linkTo syllabus content}}Syllabus{{/linkTo}}\n</small>\n");window.Ember.TEMPLATES["app/templates/menu"] = Ember.Handlebars.compile("<h3>{{Courseware.app_name}}</h3>\n{{#unless Courseware.access_token}}\n<p>\n  <a {{action goToLogin}} class='button small'>\n    Please login first\n  </a>\n</p>\n{{/unless}}\n");window.Ember.TEMPLATES["app/templates/notifications"] = Ember.Handlebars.compile("{{#if view.notifications.length}}\n{{#each view.notifications}}\n<div {{bindAttr class=\"this.className this:alert-box this:round\"}} data-alert>\n  {{this.message}}\n  <a class='close' href='#'>&times;</a>\n</div>\n{{/each}}\n{{/if}}\n");window.Ember.TEMPLATES["app/templates/signin"] = Ember.Handlebars.compile("<form>\n  <label for='emailField'>Email</label>\n  {{view Ember.TextField valueBinding='email' id='emailField' type='email'}}\n  <label for='passwordField'>Password</label>\n  {{view Ember.TextField valueBinding='password' id='passwordField' type='password'}}\n  <button {{bindAttr disabled=\"isDisabled\"}} {{action signIn}} class='small success' type='submit'>\n    Sign In\n  </button>\n</form>\n");window.Ember.TEMPLATES["app/templates/syllabus"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{title}}</h3>\n<p>{{content}}</p>\n{{/with}}\n");window.Ember.TEMPLATES["app/templates/user"] = Ember.Handlebars.compile("{{#with content.firstObject}}\n<h3>{{fullName}}</h3>\n<h4>{{email}}</h4>\n{{/with}}\n");(function() {
   Courseware.ApplicationView = Ember.View.extend({
     templateName: 'app/templates/application'
   });
 
 }).call(this);
 (function() {
-<<<<<<< HEAD
+  Courseware.ClassroomsView = Ember.View.extend({
+    templateName: 'app/templates/classrooms/layout'
+  });
+
+  Courseware.ClassroomsIndexView = Ember.View.extend({
+    templateName: 'app/templates/classrooms/index'
+  });
+
+  Courseware.ClassroomsShowView = Ember.View.extend({
+    templateName: 'app/templates/classrooms/show'
+  });
+
+}).call(this);
+(function() {
   Courseware.MenuView = Ember.View.extend({
     classNameBindings: ['isSlided:slided:unslided'],
     classNames: ['unslided'],
@@ -49863,18 +49871,6 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
     click: function() {
       return this.toggleProperty('isSlided');
     }
-=======
-  Courseware.ClassroomsView = Ember.View.extend({
-    templateName: 'app/templates/classrooms/layout'
-  });
-
-  Courseware.ClassroomsIndexView = Ember.View.extend({
-    templateName: 'app/templates/classrooms/index'
-  });
-
-  Courseware.ClassroomsShowView = Ember.View.extend({
-    templateName: 'app/templates/classrooms/show'
->>>>>>> journey/web_app_modifications
   });
 
 }).call(this);
@@ -49974,6 +49970,7 @@ window.Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.compile("
 }).call(this);
 (function() {
   Auth.Config.reopen({
+    baseUrl: 'http://api.coursewa.re',
     tokenCreateUrl: '/oauth/authenticate',
     tokenKey: 'access_token',
     urlAuthentication: true,
