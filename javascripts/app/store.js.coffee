@@ -3,4 +3,5 @@ Courseware.Store = DS.Store.extend
   adapter: Courseware.RESTAdapter.create
     bulkCommit: false
     # API End-point namespace
-    url: 'v1'
+    url: 'http://api.coursewa.re'
+    namespace: 'v1'

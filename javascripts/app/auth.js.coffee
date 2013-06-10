@@ -1,4 +1,5 @@
 Auth.Config.reopen
+  baseUrl: 'http://api.coursewa.re'
   tokenCreateUrl: '/oauth/authenticate'
   tokenKey: 'access_token'
   urlAuthentication: true

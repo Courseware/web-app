@@ -1,0 +1,11 @@
+{
+  "name": "Coursewa.re",
+  "description": "Coursewa.re Web App",
+  "launch_path": "/index.html",
+  "icons": {},
+  "developer": {
+    "name": "Coursewa.re",
+    "url": "http://coursewa.re"
+  },
+  "default_locale": "en"
+}

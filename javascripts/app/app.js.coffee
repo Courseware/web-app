@@ -18,4 +18,4 @@ window.Courseware = Ember.Application.create
   app_name: 'The Courseware Project'
   rootElement: '#content'
   notifications: []
-  client_id: '763453d6ae9d07183cf8096cf6b58253ac7a806ecdad4eba4dd78adc90652d1f'
+  client_id: '75912ad5297229ceb49774f61956668656bd0f47a5ed98ef72f89b1c39a001af'
