@@ -20,6 +20,7 @@ end
 
 guard 'sprockets', {
     :destination => 'public',
+    :minify => true,
     :asset_paths => [
       'javascripts',
       # Zurb could definitely use some ruby love
